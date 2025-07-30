@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Jain Marriage Portal - Mobile Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        
+        .test-container {
+            padding: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        .test-section {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .test-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+        
+        .test-item {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .touch-target {
+            min-height: 44px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+        }
+        
+        .touch-target:active {
+            transform: scale(0.98);
+        }
+        
+        .input-test {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 16px;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        
+        .input-test:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .status {
+            text-align: center;
+            padding: 16px;
+            margin-top: 20px;
+            background: #e6fffa;
+            border: 1px solid #81e6d9;
+            border-radius: 8px;
+            color: #234e52;
+        }
+        
+        .device-info {
+            font-size: 0.85rem;
+            color: #718096;
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 16px;
+        }
+        
+        /* iOS safe area visualization */
+        .safe-area-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: env(safe-area-inset-top, 0px);
+            background: rgba(255, 0, 0, 0.3);
+            z-index: 1000;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 480px) {
+            .test-container {
+                margin: 10px;
+                padding: 16px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="safe-area-indicator"></div>
+    
+    <div class="test-container">
+        <h1>📱 Mobile Test Suite</h1>
+        
+        <div class="test-section">
+            <div class="test-title">Touch Targets</div>
+            <div class="test-item">
+                <button class="touch-target" onclick="showResult('Touch target works!')">
+                    Test Touch Button (44px min height)
+                </button>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Input Fields</div>
+            <div class="test-item">
+                <input type="email" class="input-test" placeholder="Test email input (16px font)" 
+                       onclick="showResult('Input focus - no zoom on iOS')">
+            </div>
+            <div class="test-item">
+                <input type="password" class="input-test" placeholder="Test password input"
+                       onclick="showResult('Password input active')">
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Responsive Features</div>
+            <div class="test-item">
+                <div id="viewport-info">Loading viewport info...</div>
+            </div>
+            <div class="test-item">
+                <div id="orientation-info">Loading orientation...</div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">iOS/Android Detection</div>
+            <div class="test-item">
+                <div id="platform-info">Loading platform info...</div>
+            </div>
+        </div>
+        
+        <div class="status" id="status">
+            ✅ Mobile optimization test loaded successfully!
+        </div>
+        
+        <div class="device-info" id="device-details">
+            Loading device information...
+        </div>
+    </div>
+    
+    <script>
+        function showResult(message) {
+            document.getElementById('status').innerHTML = `✅ ${message}`;
+            document.getElementById('status').style.background = '#f0fff4';
+            document.getElementById('status').style.borderColor = '#9ae6b4';
+        }
+        
+        function updateDeviceInfo() {
+            const viewport = document.getElementById('viewport-info');
+            const orientation = document.getElementById('orientation-info');
+            const platform = document.getElementById('platform-info');
+            const deviceDetails = document.getElementById('device-details');
+            
+            // Viewport info
+            viewport.innerHTML = `Viewport: ${window.innerWidth}×${window.innerHeight}px`;
+            
+            // Orientation
+            const orientationText = window.innerHeight > window.innerWidth ? 'Portrait' : 'Landscape';
+            orientation.innerHTML = `Orientation: ${orientationText}`;
+            
+            // Platform detection
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            const isAndroid = /Android/.test(navigator.userAgent);
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+            
+            let platformText = 'Desktop';
+            if (isIOS) platformText = 'iOS';
+            else if (isAndroid) platformText = 'Android';
+            else if (isMobile) platformText = 'Mobile';
+            
+            platform.innerHTML = `Platform: ${platformText}`;
+            
+            // Device details
+            const details = [
+                `User Agent: ${navigator.userAgent.substring(0, 50)}...`,
+                `Screen: ${screen.width}×${screen.height}px`,
+                `Device Pixel Ratio: ${window.devicePixelRatio || 1}`,
+                `Touch Support: ${('ontouchstart' in window) ? 'Yes' : 'No'}`,
+                `Safe Area Top: ${getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)') || 'Not supported'}`
+            ];
+            
+            deviceDetails.innerHTML = details.join('<br>');
+        }
+        
+        // Update info on load and resize
+        updateDeviceInfo();
+        window.addEventListener('resize', updateDeviceInfo);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(updateDeviceInfo, 100);
+        });
+        
+        // Test touch events
+        document.addEventListener('touchstart', function() {
+            console.log('Touch event detected');
+        }, { passive: true });
+    </script>
+</body>
+</html>
